@@ -1,0 +1,588 @@
+/* NEXORA712 Ultra-Cinematic Cyber Styles & Animations */
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #030508;
+}
+::-webkit-scrollbar-thumb {
+    background: #1c263c;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #00f2fe;
+}
+
+/* ==================== MOUSE SPOTLIGHT GLOW ==================== */
+#mouse-spotlight {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 600px;
+    height: 600px;
+    margin-top: -300px;
+    margin-left: -300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 242, 254, 0.08) 0%, rgba(139, 92, 246, 0.04) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+    transition: opacity 0.3s ease;
+    will-change: transform;
+}
+
+/* ==================== CLICK SPARK BURST ==================== */
+.click-spark {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    will-change: transform, opacity;
+}
+
+/* ==================== PRELOADER ANIMATION ==================== */
+#preloader.loaded {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(1.08);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.preloader-laser {
+    animation: laserScan 1.8s infinite ease-in-out;
+}
+
+@keyframes laserScan {
+    0% {
+        top: 0%;
+        opacity: 0.2;
+    }
+    50% {
+        top: 96%;
+        opacity: 1;
+    }
+    100% {
+        top: 0%;
+        opacity: 0.2;
+    }
+}
+
+.preloader-logo-img {
+    animation: preloaderPulse 2.5s infinite ease-in-out;
+}
+
+@keyframes preloaderPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+/* ==================== HERO 3D LEVITATION & ORBITALS ==================== */
+.hero-logo-box {
+    animation: floatLevitate 6s ease-in-out infinite;
+    will-change: transform;
+}
+
+@keyframes floatLevitate {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-14px) rotate(1deg);
+    }
+}
+
+.floating-chip {
+    animation: chipFloat 4.5s ease-in-out infinite;
+    will-change: transform;
+}
+.floating-chip-reverse {
+    animation: chipFloatReverse 5s ease-in-out infinite;
+    will-change: transform;
+}
+
+@keyframes chipFloat {
+    0%, 100% {
+        transform: translateY(0px) scale(1);
+    }
+    50% {
+        transform: translateY(-8px) scale(1.02);
+    }
+}
+
+@keyframes chipFloatReverse {
+    0%, 100% {
+        transform: translateY(0px) scale(1);
+    }
+    50% {
+        transform: translateY(8px) scale(0.98);
+    }
+}
+
+/* Glowing Neon Halo Rings */
+.halo-spin-slow {
+    animation: spinClockwise 25s linear infinite;
+}
+.halo-spin-reverse {
+    animation: spinCounterClockwise 20s linear infinite;
+}
+
+@keyframes spinClockwise {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+@keyframes spinCounterClockwise {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+}
+
+/* ==================== 3D TILT & LASER CARDS ==================== */
+.tilt-card {
+    position: relative;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+    will-change: transform;
+}
+
+.tilt-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(0, 242, 254, 0.4), transparent 60%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.tilt-card:hover::before {
+    opacity: 1;
+}
+
+.tilt-card:hover {
+    box-shadow: 0 20px 45px -12px rgba(0, 242, 254, 0.18);
+    border-color: rgba(0, 242, 254, 0.4);
+}
+
+/* Interactive Magnetic Button */
+.magnet-btn {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+    will-change: transform;
+}
+
+/* ==================== SCROLL REVEAL ANIMATIONS ==================== */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(35px);
+    transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger Delays */
+.delay-100 { transition-delay: 0.1s; }
+.delay-200 { transition-delay: 0.2s; }
+.delay-300 { transition-delay: 0.3s; }
+.delay-400 { transition-delay: 0.4s; }
+
+/* ==================== CALCULATOR & FEATURE STYLING ==================== */
+.calc-radio-card input:checked + div {
+    border-color: #00f2fe;
+    background: rgba(0, 242, 254, 0.08);
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.2), inset 0 0 15px rgba(0, 242, 254, 0.05);
+}
+
+.feature-checkbox input:checked + div {
+    border-color: #00f2fe;
+    background: rgba(0, 242, 254, 0.08);
+}
+.feature-checkbox input:checked + div .check-box {
+    background-color: #00f2fe;
+    border-color: #00f2fe;
+    color: #030508;
+}
+
+.filter-btn.active {
+    background: #ffffff !important;
+    color: #030508 !important;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.lang-btn.active {
+    background: #1c263c !important;
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+.ai-niche-btn.active {
+    border-color: #8b5cf6 !important;
+    background: rgba(139, 92, 246, 0.18) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 18px rgba(139, 92, 246, 0.3);
+}
+
+/* ==================== MODALS ==================== */
+#project-modal.active, #ai-modal.active, #proposal-modal.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#project-modal.active > div, #ai-modal.active > div, #proposal-modal.active > div {
+    transform: scale(1);
+}
+
+#project-modal > div, #ai-modal > div, #proposal-modal > div {
+    transform: scale(0.93);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==================== FAQ ACCORDION ==================== */
+.faq-item.active {
+    border-color: rgba(0, 242, 254, 0.4);
+    background: rgba(17, 24, 39, 0.95);
+    box-shadow: 0 8px 25px -5px rgba(0, 242, 254, 0.1);
+}
+
+.faq-item.active .faq-question i {
+    transform: rotate(180deg);
+    color: #00f2fe;
+}
+
+.faq-item.active .faq-answer {
+    display: block;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Toast */
+#toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* ==================== PRINT STYLES ==================== */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    #proposal-modal, #proposal-modal * {
+        visibility: visible;
+    }
+    #proposal-modal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        color: black !important;
+    }
+    #close-proposal-btn, #proposal-modal button, #proposal-modal a {
+        display: none !important;
+    }
+}
+
+/* ==================== 21. ADVANCED CYBER CURSOR & TARGET RETICLE ==================== */
+#cyber-cursor-dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 6px;
+    height: 6px;
+    background: #00f2fe;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 100000;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe;
+    transition: opacity 0.2s ease, transform 0.05s ease;
+    will-change: left, top;
+}
+
+#cyber-cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid rgba(0, 242, 254, 0.6);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                height 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                border-color 0.2s ease, 
+                background-color 0.2s ease;
+    will-change: left, top;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#cyber-cursor-ring::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 1px dashed rgba(139, 92, 246, 0.4);
+    border-radius: 50%;
+    animation: spinSlow 10s linear infinite;
+}
+
+#cursor-action-tag {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%) translateX(8px);
+    background: rgba(3, 5, 8, 0.95);
+    border: 1px solid #00f2fe;
+    color: #00f2fe;
+    font-family: 'Fira Code', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+    transition: opacity 0.2s ease;
+}
+
+/* Cursor Hover States */
+body.cursor-active #cyber-cursor-ring {
+    width: 54px;
+    height: 54px;
+    border-color: #00f2fe;
+    background: rgba(0, 242, 254, 0.06);
+    box-shadow: 0 0 25px rgba(0, 242, 254, 0.25);
+}
+
+body.cursor-active #cyber-cursor-dot {
+    background: #ffffff;
+    box-shadow: 0 0 12px #ffffff;
+    transform: translate(-50%, -50%) scale(1.4);
+}
+
+body.cursor-active #cursor-action-tag {
+    opacity: 1;
+}
+
+@media (pointer: coarse) {
+    #cyber-cursor-dot, #cyber-cursor-ring {
+        display: none !important;
+    }
+}
+
+/* ==================== 22. ROTATING CONIC LASER BORDER ==================== */
+.laser-card-border {
+    position: relative;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    background: rgba(10, 15, 24, 0.85);
+    z-index: 1;
+}
+
+.laser-card-border::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(0, 242, 254, 0.8) 45deg,
+        transparent 90deg,
+        transparent 180deg,
+        rgba(139, 92, 246, 0.8) 225deg,
+        transparent 270deg,
+        transparent 360deg
+    );
+    animation: rotateConicLaser 4s linear infinite;
+    z-index: -2;
+}
+
+.laser-card-border::after {
+    content: '';
+    position: absolute;
+    inset: 1.5px;
+    background: inherit;
+    border-radius: calc(1.5rem - 1.5px);
+    z-index: -1;
+}
+
+@keyframes rotateConicLaser {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* ==================== 23. SVG CIRCUIT DATA PACKET FLOW ==================== */
+.circuit-svg-wire {
+    stroke-dasharray: 6 6;
+    animation: dashPulse 25s linear infinite;
+}
+
+@keyframes dashPulse {
+    to {
+        stroke-dashoffset: -1000;
+    }
+}
+
+.packet-glow {
+    filter: drop-shadow(0 0 6px #00f2fe);
+}
+
+/* ==================== 24. INTERACTIVE CLI TERMINAL SCANLINE ==================== */
+.cli-scanlines {
+    background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.35) 50%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+}
+
+.cli-caret {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    background-color: #00f2fe;
+    vertical-align: middle;
+    animation: blinkCaret 1s step-start infinite;
+}
+
+@keyframes blinkCaret {
+    50% { opacity: 0; }
+}
+
+/* ==================== 25. ROI RANGE INPUT CUSTOM GLOW ==================== */
+.cyber-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 9999px;
+    background: #1c263c;
+    outline: none;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.6);
+}
+
+.cyber-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffffff 30%, #00f2fe 100%);
+    cursor: pointer;
+    box-shadow: 0 0 15px #00f2fe, 0 0 30px rgba(0, 242, 254, 0.5);
+    border: 2px solid #030508;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cyber-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 25px #00f2fe, 0 0 45px rgba(0, 242, 254, 0.8);
+}
+
+.cyber-slider::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffffff 30%, #00f2fe 100%);
+    cursor: pointer;
+    box-shadow: 0 0 15px #00f2fe;
+    border: 2px solid #030508;
+}
+
+/* ==================== 26. HACKER SCRAMBLE TEXT ==================== */
+.scramble-hover {
+    display: inline-block;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+.scramble-hover:hover {
+    color: #00f2fe !important;
+    text-shadow: 0 0 12px rgba(0, 242, 254, 0.6);
+}
+
+/* ==================== 27. NEXORA ARCHITECT IDE SYNTAX & UI ==================== */
+.ide-tab.active {
+    background: #0b1019 !important;
+    color: #ffffff !important;
+    border-bottom: 2px solid #00f2fe !important;
+}
+
+.tok-kw { color: #ff7b72; font-weight: 600; }
+.tok-fn { color: #d2a8ff; font-weight: 600; }
+.tok-str { color: #a5d6ff; }
+.tok-com { color: #6e7681; font-style: italic; }
+.tok-dec { color: #79c0ff; }
+.tok-num { color: #79c0ff; }
+.tok-cls { color: #ffa657; font-weight: 600; }
+.tok-var { color: #e6edf3; }
+.tok-bool { color: #ff7b72; font-weight: 600; }
+
+.ide-line-numbers {
+    user-select: none;
+    color: #484f58;
+    text-align: right;
+    padding-right: 1rem;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ==================== 28. TELEGRAM VOICE REVIEW WAVEFORM ==================== */
+.tg-voice-wave-bar {
+    width: 2.5px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.35);
+    transition: height 0.15s ease, background-color 0.15s ease;
+}
+
+.tg-voice-card.playing .tg-voice-wave-bar {
+    animation: wavePulse 1s ease-in-out infinite alternate;
+    background: #00f2fe;
+}
+
+@keyframes wavePulse {
+    0% { height: 20%; }
+    50% { height: 100%; }
+    100% { height: 35%; }
+}
+
+/* ==================== 29. AMBIENT SCANNER & GLOW ==================== */
+.ambient-laser-grid {
+    background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+}
+
+

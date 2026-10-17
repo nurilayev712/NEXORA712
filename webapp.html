@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>NEXORA DEV — Pro Digital Agency</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    :root {
+      --c-bg:      #02040f;
+      --c-surface: rgba(10,16,40,0.72);
+      --c-border:  rgba(99,179,237,0.13);
+      --c-border2: rgba(139,92,246,0.18);
+      --c-cyan:    #22d3ee;
+      --c-blue:    #60a5fa;
+      --c-violet:  #a78bfa;
+      --c-pink:    #f472b6;
+      --c-green:   #34d399;
+      --c-amber:   #fbbf24;
+      --nav-h:     68px;
+    }
+
+    html { background: var(--c-bg); }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: var(--c-bg);
+      color: #e2e8f0;
+      min-height: 100dvh;
+      padding-bottom: calc(var(--nav-h) + 16px);
+      overflow-x: hidden;
+    }
+
+    /* ─── Aurora Background ─── */
+    #aurora {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+    }
+    .aurora-blob {
+      position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.18;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+    .ab1 { width:500px; height:500px; background:#22d3ee; top:-120px; left:-100px; animation-delay:0s; }
+    .ab2 { width:400px; height:400px; background:#a78bfa; bottom:-100px; right:-80px; animation-delay:-6s; }
+    .ab3 { width:300px; height:300px; background:#f472b6; top:40%; left:40%; animation-delay:-12s; }
+    @keyframes drift { from{transform:translate(0,0) scale(1);} to{transform:translate(40px,30px) scale(1.1);} }
+
+    /* ─── Glassmorphism card ─── */
+    .glass {
+      background: var(--c-surface);
+      border: 1px solid var(--c-border);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .glass-active {
+      background: rgba(34,211,238,0.08);
+      border: 1px solid rgba(34,211,238,0.45);
+      box-shadow: 0 0 28px rgba(34,211,238,0.15), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .glass-violet {
+      background: rgba(167,139,250,0.07);
+      border: 1px solid rgba(167,139,250,0.3);
+    }
+
+    /* ─── Typography ─── */
+    .font-syne { font-family: 'Syne', sans-serif; }
+
+    /* ─── Glow effects ─── */
+    .glow-cyan   { text-shadow: 0 0 20px rgba(34,211,238,0.7); }
+    .glow-violet { text-shadow: 0 0 20px rgba(167,139,250,0.7); }
+    .shadow-glow-cyan   { box-shadow: 0 0 30px rgba(34,211,238,0.3); }
+    .shadow-glow-violet { box-shadow: 0 0 30px rgba(167,139,250,0.3); }
+
+    /* ─── Gradient borders ─── */
+    .grad-border {
+      position: relative;
+    }
+    .grad-border::before {
+      content: '';
+      position: absolute; inset: -1px;
+      border-radius: inherit;
+      background: linear-gradient(135deg, rgba(34,211,238,0.6), rgba(167,139,250,0.5), rgba(244,114,182,0.3));
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      padding: 1px; pointer-events: none;
+    }
+
+    /* ─── Animated gradient text ─── */
+    .grad-text {
+      background: linear-gradient(135deg, #22d3ee 0%, #a78bfa 50%, #f472b6 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 200% 200%;
+      animation: gradShift 4s ease infinite;
+    }
+    @keyframes gradShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* ─── Live dot ─── */
+    .live-dot::before {
+      content: '';
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--c-green);
+      margin-right: 5px;
+      animation: livePulse 1.5s ease-in-out infinite;
+    }
+    @keyframes livePulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:0.4; transform:scale(0.7); }
+    }
+
+    /* ─── Button press ─── */
+    .tap {
+      transition: transform 0.13s cubic-bezier(.4,0,.2,1), opacity 0.13s;
+      cursor: pointer;
+    }
+    .tap:active { transform: scale(0.94); opacity: 0.85; }
+
+    /* ─── Scrollbar ─── */
+    ::-webkit-scrollbar { width: 2px; height: 2px; }
+    ::-webkit-scrollbar-thumb { background: rgba(99,179,237,0.3); border-radius: 4px; }
+
+    /* ─── Range Input ─── */
+    input[type=range] { -webkit-appearance: none; appearance: none; height: 4px;
+      background: linear-gradient(to right, var(--c-cyan), var(--c-violet));
+      border-radius: 2px; outline: none; }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 18px; height: 18px;
+      border-radius: 50%; background: var(--c-cyan);
+      box-shadow: 0 0 10px rgba(34,211,238,0.6); cursor: pointer;
+    }
+
+    /* ─── Checkbox ─── */
+    .cb-custom { display: none; }
+    .cb-box {
+      width: 20px; height: 20px; border-radius: 6px; flex-shrink: 0;
+      border: 1.5px solid rgba(99,179,237,0.4);
+      background: rgba(10,16,40,0.5);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .cb-custom:checked + label .cb-box {
+      background: var(--c-cyan); border-color: var(--c-cyan);
+      box-shadow: 0 0 12px rgba(34,211,238,0.5);
+    }
+    .cb-check { opacity: 0; color: #02040f; font-size: 11px; font-weight: 900; }
+    .cb-custom:checked + label .cb-check { opacity: 1; }
+
+    /* ─── Stepper progress ─── */
+    .step-line { height: 2px; background: rgba(99,179,237,0.15); position: relative; }
+    .step-line-fill { height: 100%; background: linear-gradient(to right, var(--c-cyan), var(--c-violet)); transition: width 0.6s ease; }
+
+    /* ─── Nav dock ─── */
+    #dock-nav {
+      position: fixed; bottom: 10px; left: 12px; right: 12px;
+      max-width: 420px; margin: 0 auto;
+      background: rgba(5,10,28,0.92);
+      backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(99,179,237,0.2);
+      border-radius: 22px;
+      box-shadow: 0 16px 50px rgba(0,0,0,0.7), 0 0 40px rgba(34,211,238,0.08);
+      padding: 6px;
+      z-index: 100;
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
+    }
+
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 8px 4px; border-radius: 16px; gap: 3px;
+      transition: all 0.22s cubic-bezier(.4,0,.2,1);
+      position: relative; color: rgba(148,163,184,0.7);
+    }
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(34,211,238,0.18), rgba(96,165,250,0.12));
+      color: var(--c-cyan);
+      box-shadow: 0 0 20px rgba(34,211,238,0.2);
+      border: 1px solid rgba(34,211,238,0.35);
+    }
+    .nav-item i { font-size: 17px; }
+    .nav-item span { font-size: 9px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; }
+    .nav-badge {
+      position: absolute; top: 6px; right: 10px;
+      width: 8px; height: 8px; border-radius: 50%;
+      border: 1.5px solid var(--c-bg);
+    }
+
+    /* ─── Tab sections ─── */
+    .tab-section { display: none; animation: fadeUp 0.3s ease; }
+    .tab-section.active { display: block; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Service card ─── */
+    .svc-card {
+      border-radius: 18px; padding: 16px; cursor: pointer;
+      transition: all 0.22s cubic-bezier(.4,0,.2,1);
+      position: relative; overflow: hidden;
+    }
+    .svc-card.sel {
+      background: rgba(34,211,238,0.08);
+      border: 1.5px solid rgba(34,211,238,0.5);
+      box-shadow: 0 0 30px rgba(34,211,238,0.15);
+    }
+    .svc-card.unsel {
+      background: rgba(10,16,40,0.5);
+      border: 1px solid rgba(99,179,237,0.12);
+      opacity: 0.65;
+    }
+
+    /* ─── Level card ─── */
+    .lvl-card {
+      border-radius: 16px; padding: 12px 8px;
+      text-align: center; cursor: pointer;
+      transition: all 0.22s cubic-bezier(.4,0,.2,1);
+      position: relative; overflow: visible;
+    }
+    .lvl-card.sel {
+      background: rgba(34,211,238,0.1);
+      border: 1.5px solid rgba(34,211,238,0.5);
+      box-shadow: 0 0 25px rgba(34,211,238,0.18);
+      color: var(--c-cyan);
+    }
+    .lvl-card.unsel {
+      background: rgba(10,16,40,0.45);
+      border: 1px solid rgba(99,179,237,0.1);
+      color: rgba(148,163,184,0.8);
+    }
+
+    /* ─── Feature row ─── */
+    .feat-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 14px;
+      background: rgba(5,10,28,0.6);
+      border: 1px solid rgba(99,179,237,0.1);
+      transition: border-color 0.2s;
+      cursor: pointer;
+    }
+    .feat-row:hover { border-color: rgba(34,211,238,0.3); }
+
+    /* ─── Price HUD ─── */
+    .price-hud {
+      background: linear-gradient(135deg, rgba(34,211,238,0.08), rgba(167,139,250,0.06));
+      border: 1px solid rgba(34,211,238,0.25);
+      border-radius: 18px; padding: 16px;
+    }
+
+    /* ─── Input ─── */
+    .nx-input {
+      width: 100%; background: rgba(5,10,28,0.7);
+      border: 1px solid rgba(99,179,237,0.15);
+      border-radius: 14px; padding: 11px 14px;
+      color: #e2e8f0; font-size: 13px; font-family: inherit;
+      outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .nx-input::placeholder { color: rgba(148,163,184,0.45); }
+    .nx-input:focus {
+      border-color: rgba(34,211,238,0.5);
+      box-shadow: 0 0 16px rgba(34,211,238,0.12);
+    }
+
+    /* ─── Submit button ─── */
+    .submit-btn {
+      width: 100%; padding: 16px;
+      background: linear-gradient(135deg, #22d3ee, #60a5fa, #a78bfa);
+      border: none; border-radius: 18px; cursor: pointer;
+      font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 800;
+      color: #02040f; letter-spacing: 0.5px;
+      box-shadow: 0 8px 32px rgba(34,211,238,0.35);
+      transition: all 0.2s; position: relative; overflow: hidden;
+      background-size: 200% 200%; animation: gradShift 3s ease infinite;
+    }
+    .submit-btn:active { transform: scale(0.97); }
+    .submit-btn::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.25) 50%, transparent 100%);
+      transform: translateX(-100%);
+      animation: shimmer 2.5s infinite;
+    }
+    @keyframes shimmer { to { transform: translateX(200%); } }
+
+    /* ─── Portfolio card ─── */
+    .pf-card { border-radius: 20px; overflow: hidden; }
+
+    /* ─── Order status stepper ─── */
+    .stage-node {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 800; flex-shrink: 0;
+      transition: all 0.3s;
+    }
+    .stage-done   { background: var(--c-green);  color: #02040f; box-shadow: 0 0 12px rgba(52,211,153,0.5); }
+    .stage-active { background: var(--c-cyan);   color: #02040f; box-shadow: 0 0 12px rgba(34,211,238,0.5); animation: stagePulse 1.5s ease infinite; }
+    .stage-wait   { background: rgba(30,41,59,0.8); color: rgba(148,163,184,0.5); border: 1px solid rgba(99,179,237,0.15); }
+    @keyframes stagePulse { 0%,100%{box-shadow:0 0 10px rgba(34,211,238,0.4);} 50%{box-shadow:0 0 20px rgba(34,211,238,0.8);} }
+
+    /* ─── Template pill ─── */
+    .tpl-pill {
+      white-space: nowrap; padding: 7px 14px;
+      border-radius: 40px; font-size: 12px; font-weight: 600;
+      background: rgba(10,16,40,0.7);
+      border: 1px solid rgba(99,179,237,0.15);
+      color: rgba(203,213,225,0.9);
+      transition: all 0.2s; cursor: pointer; flex-shrink: 0;
+    }
+    .tpl-pill:hover { border-color: rgba(34,211,238,0.4); color: var(--c-cyan); }
+    .tpl-pill:active { transform: scale(0.95); }
+
+    /* ─── Lang button ─── */
+    .lang-btn { padding: 4px 10px; border-radius: 10px; font-size: 11px; font-weight: 700; transition: all 0.2s; cursor: pointer; }
+    .lang-btn.active { background: rgba(34,211,238,0.2); color: var(--c-cyan); }
+    .lang-btn.inactive { color: rgba(148,163,184,0.6); }
+
+    /* ─── Stat card ─── */
+    .stat-card {
+      background: rgba(10,16,40,0.6);
+      border: 1px solid rgba(99,179,237,0.12);
+      border-radius: 16px; padding: 14px;
+      text-align: center;
+    }
+
+    /* ─── Z-layers ─── */
+    #app { position: relative; z-index: 1; }
+    header { position: sticky; top: 0; z-index: 50; }
+
+    /* ─── No scrollbar for horiz scroll ─── */
+    .no-scroll { scrollbar-width: none; }
+    .no-scroll::-webkit-scrollbar { display: none; }
+
+    /* ─── Hero particles ─── */
+    .particle {
+      position: absolute; border-radius: 50%; pointer-events: none;
+      animation: particleDrift linear infinite;
+    }
+    @keyframes particleDrift {
+      0%   { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
+      50%  { opacity: 0.2; }
+      100% { transform: translateY(-60px) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Aurora background -->
+<div id="aurora" aria-hidden="true">
+  <div class="aurora-blob ab1"></div>
+  <div class="aurora-blob ab2"></div>
+  <div class="aurora-blob ab3"></div>
+</div>
+
+<div id="app">
+
+<!-- ════════════════════════ HEADER ════════════════════════ -->
+<header style="background:rgba(2,4,15,0.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(99,179,237,0.1);">
+  <div style="max-width:480px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;">
+
+    <!-- Brand -->
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#22d3ee,#a78bfa);display:flex;align-items:center;justify-content:center;box-shadow:0 0 20px rgba(34,211,238,0.4);">
+        <i class="fa-solid fa-bolt" style="color:#02040f;font-size:16px;"></i>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span class="font-syne grad-text" style="font-size:17px;font-weight:800;">NEXORA</span>
+          <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:rgba(34,211,238,0.15);color:var(--c-cyan);border:1px solid rgba(34,211,238,0.3);letter-spacing:1px;">PRO</span>
+        </div>
+        <div class="live-dot" style="font-size:10px;color:var(--c-green);" data-t="txt_speed_reply">15 daqiqada javob</div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div style="display:flex;align-items:center;gap:8px;">
+      <!-- Lang -->
+      <div style="display:flex;align-items:center;gap:2px;background:rgba(10,16,40,0.8);border:1px solid rgba(99,179,237,0.15);border-radius:12px;padding:3px;">
+        <button onclick="setLanguage('uz')" id="lang-uz" class="lang-btn active">UZ</button>
+        <button onclick="setLanguage('ru')" id="lang-ru" class="lang-btn inactive">RU</button>
+        <button onclick="setLanguage('en')" id="lang-en" class="lang-btn inactive">EN</button>
+      </div>
+      <!-- User -->
+      <div style="display:flex;align-items:center;gap:6px;background:rgba(10,16,40,0.8);border:1px solid rgba(99,179,237,0.15);border-radius:12px;padding:5px 10px;">
+        <i class="fa-solid fa-circle-user" style="color:var(--c-cyan);font-size:12px;"></i>
+        <span id="header-user-name" style="font-size:12px;font-weight:600;color:#cbd5e1;max-width:70px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">Mijoz</span>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<!-- ════════════════════════ MAIN ════════════════════════ -->
+<main style="max-width:480px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
+
+<!-- ═══════ TAB 1: ORDER ═══════ -->
+<section id="tab-order" class="tab-section active" style="display:flex;flex-direction:column;gap:16px;">
+
+  <!-- HERO BANNER -->
+  <div class="grad-border" style="border-radius:24px;position:relative;overflow:hidden;">
+    <div style="background:linear-gradient(135deg,rgba(10,20,50,0.95),rgba(20,10,40,0.95));padding:22px;position:relative;">
+      <!-- Floating particles -->
+      <div class="particle" style="width:6px;height:6px;background:var(--c-cyan);top:20px;left:40px;animation-duration:4s;animation-delay:0s;"></div>
+      <div class="particle" style="width:4px;height:4px;background:var(--c-violet);top:40px;right:60px;animation-duration:5s;animation-delay:-2s;"></div>
+      <div class="particle" style="width:5px;height:5px;background:var(--c-pink);bottom:30px;left:30%;animation-duration:6s;animation-delay:-3s;"></div>
+
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:7px;background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.3);border-radius:30px;padding:5px 12px;">
+          <i class="fa-solid fa-shield-halved" style="color:var(--c-cyan);font-size:11px;"></i>
+          <span data-t="badge_guarantee" style="font-size:10px;font-weight:700;color:var(--c-cyan);letter-spacing:0.5px;">3 OY BEPUL KAFOLAT</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);border-radius:30px;padding:5px 10px;">
+          <i class="fa-solid fa-star" style="color:var(--c-amber);font-size:10px;"></i>
+          <span style="font-size:11px;font-weight:800;color:var(--c-amber);">5.0</span>
+          <span style="font-size:10px;color:rgba(251,191,36,0.7);">(120+)</span>
+        </div>
+      </div>
+
+      <h1 class="font-syne" style="font-size:22px;font-weight:800;line-height:1.2;margin-bottom:8px;">
+        <span data-t="hero_title" class="grad-text">Professional Bot va Veb-sayt Yaratish</span>
+      </h1>
+      <p data-t="hero_desc" style="font-size:12px;color:rgba(203,213,225,0.75);line-height:1.6;margin-bottom:16px;">
+        Biznesingizni Telegram va internetda to'liq avtomatlashtiring.
+      </p>
+
+      <!-- Feature chips -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:5px;background:rgba(34,211,238,0.08);border:1px solid rgba(34,211,238,0.2);border-radius:8px;padding:5px 10px;font-size:11px;color:rgba(203,213,225,0.8);">
+          <i class="fa-solid fa-bolt" style="color:var(--c-cyan);font-size:10px;"></i> Tezkor
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);border-radius:8px;padding:5px 10px;font-size:11px;color:rgba(203,213,225,0.8);">
+          <i class="fa-solid fa-credit-card" style="color:var(--c-blue);font-size:10px;"></i> Payme/Click
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.2);border-radius:8px;padding:5px 10px;font-size:11px;color:rgba(203,213,225,0.8);">
+          <i class="fa-solid fa-headset" style="color:var(--c-violet);font-size:10px;"></i> 24/7
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:5px 10px;font-size:11px;color:rgba(203,213,225,0.8);">
+          <i class="fa-solid fa-check-double" style="color:var(--c-green);font-size:10px;"></i> Kafolat
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK TEMPLATES -->
+  <div>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:10px;">
+      <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--c-violet);font-size:12px;"></i>
+      <span data-t="lbl_quick_templates" style="font-size:11px;font-weight:700;color:rgba(148,163,184,0.8);text-transform:uppercase;letter-spacing:1px;">Tezkor shablonlar</span>
+    </div>
+    <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;" class="no-scroll">
+      <button class="tpl-pill tap" onclick="applyTemplate('shop')">🛍️ Do'kon</button>
+      <button class="tpl-pill tap" onclick="applyTemplate('delivery')">🍔 Delivery</button>
+      <button class="tpl-pill tap" onclick="applyTemplate('clinic')">🏥 Klinika</button>
+      <button class="tpl-pill tap" onclick="applyTemplate('landing')">🏢 Landing</button>
+      <button class="tpl-pill tap" onclick="applyTemplate('education')">🎓 Kurslar</button>
+      <button class="tpl-pill tap" onclick="applyTemplate('realestate')">🏠 Kvartira</button>
+    </div>
+  </div>
+
+  <!-- SERVICE TYPE -->
+  <div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <span data-t="lbl_service_type" style="font-size:11px;font-weight:700;color:rgba(148,163,184,0.8);text-transform:uppercase;letter-spacing:1px;">1. Xizmat turi</span>
+      <span id="svc-badge" style="font-size:11px;font-weight:700;color:var(--c-cyan);display:flex;align-items:center;gap:4px;">
+        <i class="fa-solid fa-circle-dot"></i> Telegram Bot
+      </span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <!-- Bot -->
+      <div id="btn-service-bot" class="svc-card sel tap" onclick="setService('bot')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div style="width:42px;height:42px;border-radius:14px;background:rgba(34,211,238,0.15);display:flex;align-items:center;justify-content:center;font-size:20px;">🤖</div>
+          <div id="chk-bot" style="width:20px;height:20px;border-radius:50%;background:var(--c-cyan);display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(34,211,238,0.5);">
+            <i class="fa-solid fa-check" style="font-size:9px;color:#02040f;"></i>
+          </div>
+        </div>
+        <div data-t="btn_service_bot" style="font-weight:700;font-size:13px;color:#f1f5f9;margin-bottom:3px;">Telegram Bot</div>
+        <div data-t="btn_service_bot_sub" style="font-size:11px;color:rgba(148,163,184,0.7);">Do'kon, CRM, WebApp, AI</div>
+      </div>
+      <!-- Website -->
+      <div id="btn-service-website" class="svc-card unsel tap" onclick="setService('website')">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div style="width:42px;height:42px;border-radius:14px;background:rgba(96,165,250,0.15);display:flex;align-items:center;justify-content:center;font-size:20px;">🌐</div>
+          <div id="chk-web" style="display:none;width:20px;height:20px;border-radius:50%;background:var(--c-blue);align-items:center;justify-content:center;box-shadow:0 0 10px rgba(96,165,250,0.5);">
+            <i class="fa-solid fa-check" style="font-size:9px;color:#02040f;"></i>
+          </div>
+        </div>
+        <div data-t="btn_service_web" style="font-weight:700;font-size:13px;color:#f1f5f9;margin-bottom:3px;">Veb-sayt</div>
+        <div data-t="btn_service_web_sub" style="font-size:11px;color:rgba(148,163,184,0.7);">Landing, Korporativ, Portal</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPLEXITY LEVEL -->
+  <div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <span data-t="lbl_level" style="font-size:11px;font-weight:700;color:rgba(148,163,184,0.8);text-transform:uppercase;letter-spacing:1px;">2. Murakkablik darajasi</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+      <div id="lvl-basic" class="lvl-card unsel tap" onclick="setLevel('basic')">
+        <div data-t="lvl_basic" style="font-size:10px;font-weight:600;margin-bottom:6px;opacity:0.8;">Boshlang'ich</div>
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#f1f5f9;" id="price-basic">$70</div>
+        <div style="font-size:9px;opacity:0.5;margin-top:3px;">2-4 kun</div>
+      </div>
+      <div id="lvl-medium" class="lvl-card sel tap" onclick="setLevel('medium')" style="position:relative;">
+        <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:8px;font-weight:800;background:linear-gradient(90deg,var(--c-cyan),var(--c-violet));color:#02040f;padding:2px 10px;border-radius:20px;letter-spacing:0.5px;">🔥 OMMABOP</div>
+        <div data-t="lvl_medium" style="font-size:10px;font-weight:600;margin-bottom:6px;color:var(--c-cyan);">O'rta (Do'kon)</div>
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--c-cyan);" id="price-medium">$200</div>
+        <div style="font-size:9px;color:rgba(34,211,238,0.6);margin-top:3px;">5-8 kun</div>
+      </div>
+      <div id="lvl-advanced" class="lvl-card unsel tap" onclick="setLevel('advanced')">
+        <div data-t="lvl_advanced" style="font-size:10px;font-weight:600;margin-bottom:6px;opacity:0.8;">Murakkab</div>
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#f1f5f9;" id="price-advanced">$400+</div>
+        <div style="font-size:9px;opacity:0.5;margin-top:3px;">10-15 kun</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES CALCULATOR -->
+  <div class="glass" style="border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px;">
+    <div style="display:flex;align-items:center;gap:8px;padding-bottom:12px;border-bottom:1px solid rgba(99,179,237,0.08);">
+      <div style="width:30px;height:30px;border-radius:10px;background:rgba(34,211,238,0.12);display:flex;align-items:center;justify-content:center;">
+        <i class="fa-solid fa-sliders" style="color:var(--c-cyan);font-size:12px;"></i>
+      </div>
+      <div>
+        <div data-t="lbl_features" style="font-size:12px;font-weight:700;color:#e2e8f0;">3. Qo'shimcha funksiyalar</div>
+        <div style="font-size:10px;color:rgba(148,163,184,0.5);">Keraklilarini belgilang</div>
+      </div>
+    </div>
+
+    <!-- Feature rows -->
+    <div style="display:flex;flex-direction:column;gap:8px;">
+
+      <input type="checkbox" class="cb-custom" id="feat-payment" onchange="calculate()">
+      <label for="feat-payment" class="feat-row tap">
+        <div class="cb-box"><i class="fa-solid fa-check cb-check"></i></div>
+        <div style="flex:1;">
+          <div data-t="feat_payment" style="font-size:12px;font-weight:600;color:#e2e8f0;">💳 Click & Payme to'lov</div>
+          <div style="font-size:10px;color:rgba(148,163,184,0.5);margin-top:2px;">Avtomatik hisob-kitob va chek</div>
+        </div>
+        <div style="font-size:12px;font-weight:800;color:var(--c-cyan);background:rgba(34,211,238,0.1);padding:4px 10px;border-radius:8px;">+$50</div>
+      </label>
+
+      <input type="checkbox" class="cb-custom" id="feat-admin" onchange="calculate()">
+      <label for="feat-admin" class="feat-row tap">
+        <div class="cb-box"><i class="fa-solid fa-check cb-check"></i></div>
+        <div style="flex:1;">
+          <div data-t="feat_admin" style="font-size:12px;font-weight:600;color:#e2e8f0;">⚙️ Admin boshqaruv paneli</div>
+          <div style="font-size:10px;color:rgba(148,163,184,0.5);margin-top:2px;">Tovar, buyurtma, statistika</div>
+        </div>
+        <div style="font-size:12px;font-weight:800;color:var(--c-cyan);background:rgba(34,211,238,0.1);padding:4px 10px;border-radius:8px;">+$40</div>
+      </label>
+
+      <input type="checkbox" class="cb-custom" id="feat-ai" onchange="calculate()">
+      <label for="feat-ai" class="feat-row tap">
+        <div class="cb-box"><i class="fa-solid fa-check cb-check"></i></div>
+        <div style="flex:1;">
+          <div data-t="feat_ai" style="font-size:12px;font-weight:600;color:#e2e8f0;">🧠 ChatGPT / AI yordamchi</div>
+          <div style="font-size:10px;color:rgba(148,163,184,0.5);margin-top:2px;">24/7 jonli savol-javob</div>
+        </div>
+        <div style="font-size:12px;font-weight:800;color:var(--c-violet);background:rgba(167,139,250,0.1);padding:4px 10px;border-radius:8px;">+$60</div>
+      </label>
+
+      <input type="checkbox" class="cb-custom" id="feat-multilang" onchange="calculate()">
+      <label for="feat-multilang" class="feat-row tap">
+        <div class="cb-box"><i class="fa-solid fa-check cb-check"></i></div>
+        <div style="flex:1;">
+          <div data-t="feat_multilang" style="font-size:12px;font-weight:600;color:#e2e8f0;">🌐 Ko'p tillilik (UZ/RU/EN)</div>
+          <div style="font-size:10px;color:rgba(148,163,184,0.5);margin-top:2px;">Avto lokalizatsiya</div>
+        </div>
+        <div style="font-size:12px;font-weight:800;color:var(--c-blue);background:rgba(96,165,250,0.1);padding:4px 10px;border-radius:8px;">+$30</div>
+      </label>
+
+    </div>
+
+    <!-- Promo code -->
+    <div style="padding-top:12px;border-top:1px solid rgba(99,179,237,0.08);">
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="promo-input" placeholder="Promo-kod: NEXORA10" class="nx-input" style="font-size:12px;text-transform:uppercase;letter-spacing:1px;flex:1;">
+        <button onclick="applyPromoCode()" class="tap" style="padding:0 16px;background:rgba(34,211,238,0.12);border:1px solid rgba(34,211,238,0.3);border-radius:14px;color:var(--c-cyan);font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;white-space:nowrap;">Qo'llash</button>
+      </div>
+      <div id="promo-notice" style="display:none;margin-top:8px;font-size:11px;font-weight:600;color:var(--c-green);display:none;align-items:center;gap:5px;">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="promo-text"></span>
+      </div>
+    </div>
+
+    <!-- Price HUD -->
+    <div class="price-hud">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">
+        <div>
+          <div style="font-size:11px;color:rgba(148,163,184,0.6);font-weight:600;margin-bottom:2px;">Taxminiy narx</div>
+          <div style="display:flex;align-items:baseline;gap:6px;">
+            <span id="price-usd" class="font-syne glow-cyan" style="font-size:28px;font-weight:800;color:var(--c-cyan);">$200</span>
+          </div>
+          <div id="price-som" style="font-size:11px;color:rgba(148,163,184,0.5);font-weight:600;">~2 560 000 so'm</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:10px;color:rgba(148,163,184,0.5);margin-bottom:4px;" data-t="lbl_deadline">Muddati:</div>
+          <div id="deadline-val" style="font-size:13px;font-weight:700;color:#f1f5f9;">5 - 8 kun</div>
+          <div style="font-size:10px;color:var(--c-green);margin-top:4px;font-weight:600;">✓ Kafolat bor</div>
+        </div>
+      </div>
+      <!-- Mini progress bar decoration -->
+      <div style="height:3px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;">
+        <div style="height:100%;width:65%;background:linear-gradient(90deg,var(--c-cyan),var(--c-violet));border-radius:4px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORM FIELDS -->
+  <div class="glass" style="border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px;">
+    <div style="display:flex;align-items:center;gap:8px;padding-bottom:12px;border-bottom:1px solid rgba(99,179,237,0.08);">
+      <div style="width:30px;height:30px;border-radius:10px;background:rgba(96,165,250,0.12);display:flex;align-items:center;justify-content:center;">
+        <i class="fa-solid fa-pen-nib" style="color:var(--c-blue);font-size:12px;"></i>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#e2e8f0;">4. Loyiha ma'lumotlari</div>
+        <div style="font-size:10px;color:rgba(148,163,184,0.5);">Tez va oson ariza</div>
+      </div>
+    </div>
+
+    <div>
+      <label style="font-size:11px;font-weight:700;color:rgba(148,163,184,0.7);display:block;margin-bottom:6px;">
+        <span data-t="lbl_proj_title">Loyiha nomi</span> <span style="color:#f87171;">*</span>
+      </label>
+      <input type="text" id="form-title" class="nx-input" placeholder="Masalan: Kiyim do'koni boti">
+    </div>
+
+    <div>
+      <label style="font-size:11px;font-weight:700;color:rgba(148,163,184,0.7);display:block;margin-bottom:6px;">
+        <span data-t="lbl_proj_desc">Batafsil tavsif</span> <span style="color:#f87171;">*</span>
+      </label>
+      <textarea id="form-desc" class="nx-input" rows="3" placeholder="Loyiha qanday vazifalarni bajarishi kerak?" style="resize:none;"></textarea>
+    </div>
+
+    <div>
+      <label style="font-size:11px;font-weight:700;color:rgba(148,163,184,0.7);display:block;margin-bottom:6px;">
+        <span data-t="lbl_contact">Aloqa (Telefon / @username)</span> <span style="color:#f87171;">*</span>
+      </label>
+      <div style="position:relative;">
+        <i class="fa-solid fa-phone" style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:rgba(148,163,184,0.4);font-size:12px;"></i>
+        <input type="text" id="form-contact" class="nx-input" placeholder="+998 90 123 45 67" style="padding-left:36px;">
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBMIT -->
+  <button class="submit-btn tap" onclick="submitFinalOrder()">
+    <i class="fa-solid fa-paper-plane" style="margin-right:8px;"></i>
+    <span data-t="btn_send_order">Buyurtmani Yuborish</span>
+  </button>
+
+  <p data-t="txt_security_notice" style="text-align:center;font-size:11px;color:rgba(148,163,184,0.5);display:flex;align-items:center;justify-content:center;gap:5px;">
+    <i class="fa-solid fa-lock" style="color:var(--c-cyan);"></i>
+    Ariza xavfsiz tarzda adminga tushadi, 15 daqiqada javob
+  </p>
+
+</section>
+
+<!-- ═══════ TAB 2: PORTFOLIO ═══════ -->
+<section id="tab-portfolio" class="tab-section" style="display:none;flex-direction:column;gap:16px;">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <div>
+      <h2 class="font-syne" style="font-size:18px;font-weight:800;" data-t="title_portfolio">📁 Loyihalarimiz</h2>
+      <p style="font-size:11px;color:rgba(148,163,184,0.6);">Haqiqiy buyurtmalar va natijalar</p>
+    </div>
+    <div style="font-size:11px;font-weight:700;color:var(--c-cyan);background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.3);padding:5px 12px;border-radius:20px;">100% Real</div>
+  </div>
+
+  <!-- Filter -->
+  <div style="display:flex;gap:8px;overflow-x:auto;" class="no-scroll">
+    <button onclick="filterPf('all')" id="pf-all" class="tpl-pill tap" style="background:rgba(34,211,238,0.15);border-color:rgba(34,211,238,0.4);color:var(--c-cyan);">Barchasi</button>
+    <button onclick="filterPf('bot')" id="pf-bot" class="tpl-pill tap">🤖 Botlar</button>
+    <button onclick="filterPf('website')" id="pf-website" class="tpl-pill tap">🌐 Saytlar</button>
+  </div>
+
+  <!-- Cards -->
+  <div id="pf-cards" style="display:flex;flex-direction:column;gap:12px;">
+
+    <div class="pf-card glass tap" data-cat="bot" onclick="chooseProject('Nexora E-Commerce Bot','bot')" style="padding:18px;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:46px;height:46px;border-radius:16px;background:rgba(34,211,238,0.12);display:flex;align-items:center;justify-content:center;font-size:22px;">🛍️</div>
+          <div>
+            <div style="font-weight:700;font-size:13px;color:#f1f5f9;">Nexora E-Commerce Bot</div>
+            <div style="font-size:11px;color:rgba(148,163,184,0.6);">Telegram do'kon · 10k+ users</div>
+          </div>
+        </div>
+        <span style="font-size:9px;font-weight:800;background:rgba(34,211,238,0.12);color:var(--c-cyan);border:1px solid rgba(34,211,238,0.3);padding:3px 10px;border-radius:20px;">Bot</span>
+      </div>
+      <p style="font-size:12px;color:rgba(203,213,225,0.7);line-height:1.6;">Katalog, savatcha, Click & Payme to'lovlari, kuryer xabarlari va admin panel.</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(99,179,237,0.08);">
+        <span style="font-size:10px;font-family:monospace;color:var(--c-cyan);background:rgba(34,211,238,0.06);border:1px solid rgba(34,211,238,0.15);padding:3px 8px;border-radius:6px;">Python · aiogram 3 · SQLite</span>
+        <span style="font-size:11px;font-weight:700;color:var(--c-cyan);display:flex;align-items:center;gap:4px;">Shu xil buyurtma <i class="fa-solid fa-arrow-right" style="font-size:9px;"></i></span>
+      </div>
+    </div>
+
+    <div class="pf-card glass tap" data-cat="bot" onclick="chooseProject('FastFood Delivery Bot','bot')" style="padding:18px;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:46px;height:46px;border-radius:16px;background:rgba(251,191,36,0.12);display:flex;align-items:center;justify-content:center;font-size:22px;">🍔</div>
+          <div>
+            <div style="font-weight:700;font-size:13px;color:#f1f5f9;">FastFood Delivery Boti</div>
+            <div style="font-size:11px;color:rgba(148,163,184,0.6);">Restoran · GPS tracking</div>
+          </div>
+        </div>
+        <span style="font-size:9px;font-weight:800;background:rgba(251,191,36,0.12);color:var(--c-amber);border:1px solid rgba(251,191,36,0.3);padding:3px 10px;border-radius:20px;">Bot</span>
+      </div>
+      <p style="font-size:12px;color:rgba(203,213,225,0.7);line-height:1.6;">Jonli GPS lokatsiya, yaqin filial, chek chiqarish va avto-kuryer uzatish.</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(99,179,237,0.08);">
+        <span style="font-size:10px;font-family:monospace;color:var(--c-amber);background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.15);padding:3px 8px;border-radius:6px;">aiogram 3 · Geolocation API</span>
+        <span style="font-size:11px;font-weight:700;color:var(--c-amber);display:flex;align-items:center;gap:4px;">Shu xil buyurtma <i class="fa-solid fa-arrow-right" style="font-size:9px;"></i></span>
+      </div>
+    </div>
+
+    <div class="pf-card glass tap" data-cat="website" onclick="chooseProject('Korporativ Sayt','website')" style="padding:18px;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:46px;height:46px;border-radius:16px;background:rgba(96,165,250,0.12);display:flex;align-items:center;justify-content:center;font-size:22px;">🏢</div>
+          <div>
+            <div style="font-weight:700;font-size:13px;color:#f1f5f9;">Nexora Dev Korporativ Sayt</div>
+            <div style="font-size:11px;color:rgba(148,163,184,0.6);">Dark Cyber · PageSpeed 99</div>
+          </div>
+        </div>
+        <span style="font-size:9px;font-weight:800;background:rgba(96,165,250,0.12);color:var(--c-blue);border:1px solid rgba(96,165,250,0.3);padding:3px 10px;border-radius:20px;">Sayt</span>
+      </div>
+      <p style="font-size:12px;color:rgba(203,213,225,0.7);line-height:1.6;">Yuqori tezlik, interaktiv kalkulyator, botga ariza uzatish tizimi.</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(99,179,237,0.08);">
+        <span style="font-size:10px;font-family:monospace;color:var(--c-blue);background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.15);padding:3px 8px;border-radius:6px;">HTML5 · Tailwind · JS</span>
+        <span style="font-size:11px;font-weight:700;color:var(--c-blue);display:flex;align-items:center;gap:4px;">Shu xil buyurtma <i class="fa-solid fa-arrow-right" style="font-size:9px;"></i></span>
+      </div>
+    </div>
+
+    <div class="pf-card glass tap" data-cat="website" onclick="chooseProject('MedClinic Portali','website')" style="padding:18px;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="width:46px;height:46px;border-radius:16px;background:rgba(167,139,250,0.12);display:flex;align-items:center;justify-content:center;font-size:22px;">🏥</div>
+          <div>
+            <div style="font-weight:700;font-size:13px;color:#f1f5f9;">MedClinic Qabul Portali</div>
+            <div style="font-size:11px;color:rgba(148,163,184,0.6);">Tibbiyot · Onlayn navbat</div>
+          </div>
+        </div>
+        <span style="font-size:9px;font-weight:800;background:rgba(167,139,250,0.12);color:var(--c-violet);border:1px solid rgba(167,139,250,0.3);padding:3px 10px;border-radius:20px;">Sayt</span>
+      </div>
+      <p style="font-size:12px;color:rgba(203,213,225,0.7);line-height:1.6;">Shifokorlar jadvali, xizmatlar narxi, onlayn to'lov, bemorlar kabineti.</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid rgba(99,179,237,0.08);">
+        <span style="font-size:10px;font-family:monospace;color:var(--c-violet);background:rgba(167,139,250,0.06);border:1px solid rgba(167,139,250,0.15);padding:3px 8px;border-radius:6px;">React · Tailwind · REST API</span>
+        <span style="font-size:11px;font-weight:700;color:var(--c-violet);display:flex;align-items:center;gap:4px;">Shu xil buyurtma <i class="fa-solid fa-arrow-right" style="font-size:9px;"></i></span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════ TAB 3: MY ORDERS ═══════ -->
+<section id="tab-myorders" class="tab-section" style="display:none;flex-direction:column;gap:16px;">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <div>
+      <h2 class="font-syne" style="font-size:18px;font-weight:800;" data-t="title_my_orders">📦 Buyurtmalarim</h2>
+      <p style="font-size:11px;color:rgba(148,163,184,0.6);" data-t="txt_live_tracking">Jonli holat kuzatuvi</p>
+    </div>
+    <button onclick="loadMyOrders()" class="tap" style="display:flex;align-items:center;gap:5px;background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.25);border-radius:12px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--c-cyan);font-family:inherit;cursor:pointer;">
+      <i class="fa-solid fa-arrows-rotate"></i> Yangilash
+    </button>
+  </div>
+
+  <!-- Stage legend -->
+  <div class="glass" style="border-radius:18px;padding:14px;">
+    <div style="font-size:11px;font-weight:700;color:var(--c-cyan);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+      <i class="fa-solid fa-route"></i> Loyiha bosqichlari
+    </div>
+    <div style="display:flex;align-items:center;gap:0;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+        <div style="width:26px;height:26px;border-radius:50%;background:rgba(34,211,238,0.15);border:1.5px solid rgba(34,211,238,0.4);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--c-cyan);">1</div>
+        <div style="font-size:9px;color:rgba(148,163,184,0.7);text-align:center;">Qabul</div>
+      </div>
+      <div style="flex:1;height:2px;background:rgba(99,179,237,0.15);margin-bottom:14px;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+        <div style="width:26px;height:26px;border-radius:50%;background:rgba(96,165,250,0.15);border:1.5px solid rgba(96,165,250,0.4);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--c-blue);">2</div>
+        <div style="font-size:9px;color:rgba(148,163,184,0.7);text-align:center;">Dizayn</div>
+      </div>
+      <div style="flex:1;height:2px;background:rgba(99,179,237,0.15);margin-bottom:14px;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+        <div style="width:26px;height:26px;border-radius:50%;background:rgba(167,139,250,0.15);border:1.5px solid rgba(167,139,250,0.4);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--c-violet);">3</div>
+        <div style="font-size:9px;color:rgba(148,163,184,0.7);text-align:center;">Kodlash</div>
+      </div>
+      <div style="flex:1;height:2px;background:rgba(99,179,237,0.15);margin-bottom:14px;"></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;">
+        <div style="width:26px;height:26px;border-radius:50%;background:rgba(52,211,153,0.15);border:1.5px solid rgba(52,211,153,0.4);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--c-green);">4</div>
+        <div style="font-size:9px;color:rgba(148,163,184,0.7);text-align:center;">Tayyor</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="my-orders-list" style="display:flex;flex-direction:column;gap:12px;"></div>
+</section>
+
+<!-- ═══════ TAB 4: ADMIN ═══════ -->
+<section id="tab-admin" class="tab-section" style="display:none;flex-direction:column;gap:16px;">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid rgba(99,179,237,0.08);">
+    <div>
+      <h2 class="font-syne" style="font-size:18px;font-weight:800;">👑 Admin Panel</h2>
+      <p style="font-size:11px;color:rgba(148,163,184,0.6);">Buyurtmalar monitoringi</p>
+    </div>
+    <button onclick="loadAdminOrders()" class="tap" style="display:flex;align-items:center;gap:5px;background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.25);border-radius:12px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--c-amber);font-family:inherit;cursor:pointer;">
+      <i class="fa-solid fa-arrows-rotate"></i> Yangilash
+    </button>
+  </div>
+
+  <!-- Stat widgets -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+    <div class="stat-card">
+      <div id="adm-total" class="font-syne" style="font-size:24px;font-weight:800;color:var(--c-cyan);">1</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:rgba(148,163,184,0.5);margin-top:4px;">Jami</div>
+    </div>
+    <div class="stat-card">
+      <div id="adm-pending" class="font-syne" style="font-size:24px;font-weight:800;color:var(--c-amber);">1</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:rgba(148,163,184,0.5);margin-top:4px;">Yangi</div>
+    </div>
+    <div class="stat-card">
+      <div id="adm-done" class="font-syne" style="font-size:24px;font-weight:800;color:var(--c-green);">0</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:1px;color:rgba(148,163,184,0.5);margin-top:4px;">Tugadi</div>
+    </div>
+  </div>
+
+  <div id="adm-orders" style="display:flex;flex-direction:column;gap:12px;"></div>
+</section>
+
+</main>
+
+<!-- ════════════════════════ DOCK NAV ════════════════════════ -->
+<nav id="dock-nav">
+  <button onclick="switchTab('order')" id="nav-order" class="nav-item active tap">
+    <i class="fa-solid fa-cart-shopping"></i>
+    <span data-t="nav_order">Buyurtma</span>
+  </button>
+  <button onclick="switchTab('portfolio')" id="nav-portfolio" class="nav-item tap">
+    <i class="fa-solid fa-briefcase"></i>
+    <span data-t="nav_portfolio">Portfolio</span>
+  </button>
+  <button onclick="switchTab('myorders')" id="nav-myorders" class="nav-item tap" style="position:relative;">
+    <i class="fa-solid fa-box-archive"></i>
+    <span data-t="nav_myorders">Buyurtmalar</span>
+    <span class="nav-badge" style="background:var(--c-cyan);"></span>
+  </button>
+  <button onclick="switchTab('admin')" id="nav-admin" class="nav-item tap" style="position:relative;">
+    <i class="fa-solid fa-crown"></i>
+    <span data-t="nav_admin">Admin</span>
+    <span class="nav-badge" style="background:var(--c-amber);animation:livePulse 1.5s ease-in-out infinite;"></span>
+  </button>
+</nav>
+
+</div><!-- /#app -->
+
+<script>
+// ══════════════════════════════════════════════
+// TELEGRAM INIT
+// ══════════════════════════════════════════════
+const tg = window.Telegram?.WebApp;
+if (tg) {
+  tg.ready(); tg.expand();
+  try { tg.headerColor = '#02040f'; tg.backgroundColor = '#02040f'; } catch(e){}
+}
+
+function haptic(t='light') {
+  try {
+    if (!tg?.HapticFeedback) return;
+    if (t==='light')   tg.HapticFeedback.impactOccurred('light');
+    if (t==='medium')  tg.HapticFeedback.impactOccurred('medium');
+    if (t==='heavy')   tg.HapticFeedback.impactOccurred('heavy');
+    if (t==='success') tg.HapticFeedback.notificationOccurred('success');
+    if (t==='error')   tg.HapticFeedback.notificationOccurred('error');
+  } catch(e){}
+}
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+let lang = 'uz';
+let service = 'bot';
+let level = 'medium';
+let discount = 0;
+let activeTab = 'order';
+
+const PRICES = {
+  bot:     { basic:70, medium:200, advanced:400 },
+  website: { basic:100, medium:250, advanced:500 }
+};
+const DEADLINES = {
+  bot:     { basic:'2-4 kun', medium:'5-8 kun', advanced:'10-15 kun' },
+  website: { basic:'3-5 kun', medium:'7-12 kun', advanced:'15-25 kun' }
+};
+
+// ══════════════════════════════════════════════
+// TRANSLATIONS
+// ══════════════════════════════════════════════
+const T = {
+  uz: {
+    badge_guarantee:'3 OY BEPUL KAFOLAT',
+    hero_title:'Professional Bot va Veb-sayt Yaratish',
+    hero_desc:"Biznesingizni Telegram va internetda to'liq avtomatlashtiring.",
+    txt_speed_reply:'15 daqiqada javob',
+    lbl_quick_templates:'Tezkor shablonlar',
+    lbl_service_type:'1. Xizmat turi',
+    btn_service_bot:'Telegram Bot',
+    btn_service_bot_sub:"Do'kon, CRM, WebApp, AI",
+    btn_service_web:'Veb-sayt',
+    btn_service_web_sub:'Landing, Korporativ, Portal',
+    lbl_level:'2. Murakkablik darajasi',
+    lvl_basic:"Boshlang'ich",
+    lvl_medium:"O'rta (Do'kon)",
+    lvl_advanced:'Murakkab',
+    lbl_features:"3. Qo'shimcha funksiyalar",
+    feat_payment:"💳 Click & Payme to'lov",
+    feat_admin:'⚙️ Admin boshqaruv paneli',
+    feat_ai:'🧠 ChatGPT / AI yordamchi',
+    feat_multilang:'🌐 Ko\'p tillilik (UZ/RU/EN)',
+    lbl_deadline:'Muddati:',
+    lbl_proj_title:'Loyiha nomi',
+    lbl_proj_desc:'Batafsil tavsif',
+    lbl_contact:'Aloqa (Telefon / @username)',
+    btn_send_order:'Buyurtmani Yuborish',
+    txt_security_notice:"Ariza xavfsiz tarzda adminga tushadi, 15 daqiqada javob",
+    title_portfolio:'📁 Loyihalarimiz',
+    title_my_orders:'📦 Buyurtmalarim',
+    txt_live_tracking:'Jonli holat kuzatuvi',
+    nav_order:'Buyurtma',
+    nav_portfolio:'Portfolio',
+    nav_myorders:'Buyurtmalar',
+    nav_admin:'Admin'
+  },
+  ru: {
+    badge_guarantee:'3 МЕС ГАРАНТИИ',
+    hero_title:'Создание Ботов и Сайтов',
+    hero_desc:'Полная автоматизация бизнеса в Telegram и интернете.',
+    txt_speed_reply:'Ответ за 15 минут',
+    lbl_quick_templates:'Быстрые шаблоны',
+    lbl_service_type:'1. Тип услуги',
+    btn_service_bot:'Telegram Бот',
+    btn_service_bot_sub:'Магазин, CRM, WebApp, AI',
+    btn_service_web:'Веб-сайт',
+    btn_service_web_sub:'Лендинг, Корпоративный',
+    lbl_level:'2. Сложность',
+    lvl_basic:'Базовый',
+    lvl_medium:'Средний',
+    lvl_advanced:'Сложный',
+    lbl_features:'3. Дополнительно',
+    feat_payment:'💳 Платежи Click & Payme',
+    feat_admin:'⚙️ Админ панель',
+    feat_ai:'🧠 ChatGPT / AI помощник',
+    feat_multilang:'🌐 Мультиязычность',
+    lbl_deadline:'Срок:',
+    lbl_proj_title:'Название проекта',
+    lbl_proj_desc:'Описание',
+    lbl_contact:'Контакт (Телефон / @username)',
+    btn_send_order:'Оформить Заказ',
+    txt_security_notice:'Заявка поступит админу, ответим за 15 минут',
+    title_portfolio:'📁 Наши Проекты',
+    title_my_orders:'📦 Мои Заказы',
+    txt_live_tracking:'Статус в реальном времени',
+    nav_order:'Заказ',
+    nav_portfolio:'Портфолио',
+    nav_myorders:'Заказы',
+    nav_admin:'Админ'
+  },
+  en: {
+    badge_guarantee:'3 MONTHS FREE WARRANTY',
+    hero_title:'Pro Bots & Modern Websites',
+    hero_desc:'Full business automation in Telegram and Web.',
+    txt_speed_reply:'Response in 15 mins',
+    lbl_quick_templates:'Quick templates',
+    lbl_service_type:'1. Service type',
+    btn_service_bot:'Telegram Bot',
+    btn_service_bot_sub:'E-Store, CRM, WebApp, AI',
+    btn_service_web:'Website',
+    btn_service_web_sub:'Landing, Corporate, Portal',
+    lbl_level:'2. Complexity level',
+    lvl_basic:'Basic',
+    lvl_medium:'Medium (Store)',
+    lvl_advanced:'Advanced',
+    lbl_features:'3. Additional features',
+    feat_payment:'💳 Click & Payme Payments',
+    feat_admin:'⚙️ Admin Dashboard',
+    feat_ai:'🧠 ChatGPT / AI Assistant',
+    feat_multilang:'🌐 Multi-language (UZ/RU/EN)',
+    lbl_deadline:'Timeline:',
+    lbl_proj_title:'Project Name',
+    lbl_proj_desc:'Detailed Description',
+    lbl_contact:'Contact (Phone / @username)',
+    btn_send_order:'Submit Order',
+    txt_security_notice:'Direct secure submission, reply in 15 mins',
+    title_portfolio:'📁 Our Projects',
+    title_my_orders:'📦 My Orders',
+    txt_live_tracking:'Live project tracking',
+    nav_order:'Order',
+    nav_portfolio:'Portfolio',
+    nav_myorders:'Orders',
+    nav_admin:'Admin'
+  }
+};
+
+function setLanguage(l) {
+  haptic('light'); lang = l;
+  ['uz','ru','en'].forEach(x => {
+    const b = document.getElementById('lang-'+x);
+    b.className = 'lang-btn ' + (x===l?'active':'inactive');
+  });
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const k = el.getAttribute('data-t');
+    if (T[l]?.[k]) el.textContent = T[l][k];
+  });
+}
+
+// ══════════════════════════════════════════════
+// USER INFO
+// ══════════════════════════════════════════════
+const user = tg?.initDataUnsafe?.user;
+if (user) {
+  document.getElementById('header-user-name').textContent = user.first_name || 'Mijoz';
+  const fc = document.getElementById('form-contact');
+  if (user.username && !fc.value) fc.value = '@' + user.username;
+}
+
+// ══════════════════════════════════════════════
+// TEMPLATES
+// ══════════════════════════════════════════════
+function applyTemplate(type) {
+  haptic('medium');
+  const map = {
+    shop:       {svc:'bot', lvl:'medium', pay:1, adm:1, t:"Kiyim va Aksessuarlar Onlayn Do'koni", d:"Mijozlar tovarlarni katalogda ko'rib, savatchaga qo'shib Click/Payme orqali to'lab buyurtma berishi. Admin panel kerak."},
+    delivery:   {svc:'bot', lvl:'medium', pay:1, adm:1, t:'FastFood & Taom Yetkazib Berish Boti', d:'Mijoz lokatsiyasi, taomlar menyusi, chek chiqarish va kuryerlarga buyurtmani uzatish.'},
+    clinic:     {svc:'bot', lvl:'basic',  pay:0, adm:1, t:'Stomatologiya Klinika Qabul Boti', d:'Shifokorlar qabuliga navbatga yozilish, xizmatlar narxi va eslatma bildirishnomalari.'},
+    landing:    {svc:'website', lvl:'basic', pay:0, adm:0, ml:1, t:'Kompaniya Korporativ Landing Sayti', d:'Xizmatlar, portfolio va mijozlar arizasini botga uzatish.'},
+    education:  {svc:'bot', lvl:'medium', pay:1, adm:1, t:"O'quv Markaz va Online Kurslar Boti", d:"Kurslarga yozilish, video darslar, to'lov orqali yopiq guruhga link."},
+    realestate: {svc:'website', lvl:'medium', pay:1, adm:1, t:'Kvartira va Ko\'chmas Mulk Portali', d:'Obyektlar katalogi, fotogalereya, so\'rov va online maslahat.'}
+  };
+  const m = map[type]; if (!m) return;
+  setService(m.svc); setLevel(m.lvl);
+  document.getElementById('feat-payment').checked   = !!m.pay;
+  document.getElementById('feat-admin').checked     = !!m.adm;
+  document.getElementById('feat-ai').checked        = false;
+  document.getElementById('feat-multilang').checked = !!m.ml;
+  document.getElementById('form-title').value = m.t;
+  document.getElementById('form-desc').value  = m.d;
+  calculate();
+}
+
+// ══════════════════════════════════════════════
+// SERVICE & LEVEL
+// ══════════════════════════════════════════════
+function setService(s) {
+  haptic('light'); service = s;
+  const bBot = document.getElementById('btn-service-bot');
+  const bWeb = document.getElementById('btn-service-website');
+  const ckBot = document.getElementById('chk-bot');
+  const ckWeb = document.getElementById('chk-web');
+  const badge = document.getElementById('svc-badge');
+
+  if (s==='bot') {
+    bBot.className='svc-card sel tap'; bWeb.className='svc-card unsel tap';
+    ckBot.style.display='flex'; ckWeb.style.display='none';
+    badge.innerHTML='<i class="fa-solid fa-circle-dot"></i> Telegram Bot';
+    badge.style.color='var(--c-cyan)';
+  } else {
+    bWeb.className='svc-card sel tap'; bBot.className='svc-card unsel tap';
+    ckWeb.style.display='flex'; ckBot.style.display='none';
+    badge.innerHTML='<i class="fa-solid fa-circle-dot"></i> Veb-sayt';
+    badge.style.color='var(--c-blue)';
+  }
+
+  document.getElementById('price-basic').textContent   = '$'+PRICES[s].basic;
+  document.getElementById('price-medium').textContent  = '$'+PRICES[s].medium;
+  document.getElementById('price-advanced').textContent= '$'+PRICES[s].advanced+'+';
+  calculate();
+}
+
+function setLevel(l) {
+  haptic('light'); level = l;
+  ['basic','medium','advanced'].forEach(x => {
+    const el = document.getElementById('lvl-'+x);
+    el.className = 'lvl-card tap ' + (x===l?'sel':'unsel');
+  });
+  // Re-apply "ommabop" badge for medium
+  const med = document.getElementById('lvl-medium');
+  if (!med.querySelector('.ommabop')) {
+    const badge = document.createElement('div');
+    badge.className='ommabop';
+    badge.style.cssText='position:absolute;top:-10px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:8px;font-weight:800;background:linear-gradient(90deg,var(--c-cyan),var(--c-violet));color:#02040f;padding:2px 10px;border-radius:20px;letter-spacing:0.5px;';
+    badge.textContent='🔥 OMMABOP';
+    med.appendChild(badge);
+  }
+  calculate();
+}
+
+// ══════════════════════════════════════════════
+// PROMO
+// ══════════════════════════════════════════════
+function applyPromoCode() {
+  const code = document.getElementById('promo-input').value.trim().toUpperCase();
+  const notice = document.getElementById('promo-notice');
+  const text   = document.getElementById('promo-text');
+  if (code==='NEXORA10'||code==='START2026') {
+    discount=10; text.textContent="10% chegirma qo'llandi!";
+    notice.style.display='flex'; haptic('success');
+    try { confetti({particleCount:80,spread:70,origin:{y:0.7}}); } catch(e){}
+  } else if (code==='VIP50') {
+    discount=20; text.textContent="🔥 20% super chegirma!";
+    notice.style.display='flex'; haptic('success');
+    try { confetti({particleCount:130,spread:90,origin:{y:0.6}}); } catch(e){}
+  } else {
+    alert("Noto'g'ri promo-kod! Masalan: NEXORA10");
+    haptic('error');
+  }
+  calculate();
+}
+
+// ══════════════════════════════════════════════
+// CALCULATE
+// ══════════════════════════════════════════════
+function calculate() {
+  let total = PRICES[service][level];
+  if (document.getElementById('feat-payment')?.checked)   total+=50;
+  if (document.getElementById('feat-admin')?.checked)     total+=40;
+  if (document.getElementById('feat-ai')?.checked)        total+=60;
+  if (document.getElementById('feat-multilang')?.checked) total+=30;
+  if (discount>0) total = Math.round(total*(1-discount/100));
+  document.getElementById('price-usd').textContent = '$'+total;
+  document.getElementById('price-som').textContent = '~'+((total*12800).toLocaleString())+' so\'m';
+  document.getElementById('deadline-val').textContent = DEADLINES[service][level];
+}
+
+// ══════════════════════════════════════════════
+// TAB SWITCHING
+// ══════════════════════════════════════════════
+function switchTab(tab) {
+  haptic('light');
+  activeTab = tab;
+  document.querySelectorAll('.tab-section').forEach(s => { s.style.display='none'; s.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  const sec = document.getElementById('tab-'+tab);
+  const nav = document.getElementById('nav-'+tab);
+  if (sec) { sec.style.display='flex'; sec.classList.add('active'); }
+  if (nav) nav.classList.add('active');
+  if (tab==='myorders') loadMyOrders();
+  if (tab==='admin')    loadAdminOrders();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════════
+// PORTFOLIO FILTER
+// ══════════════════════════════════════════════
+function filterPf(cat) {
+  haptic('light');
+  ['all','bot','website'].forEach(c => {
+    const b = document.getElementById('pf-'+c);
+    if (b) {
+      b.style.background = c===cat?'rgba(34,211,238,0.15)':'rgba(10,16,40,0.7)';
+      b.style.borderColor= c===cat?'rgba(34,211,238,0.4)':'rgba(99,179,237,0.15)';
+      b.style.color      = c===cat?'var(--c-cyan)':'rgba(203,213,225,0.9)';
+    }
+  });
+  document.querySelectorAll('.pf-card[data-cat]').forEach(card => {
+    card.style.display = (cat==='all'||card.dataset.cat===cat) ? 'flex' : 'none';
+  });
+}
+
+function chooseProject(title, s) {
+  setService(s);
+  document.getElementById('form-title').value = title;
+  switchTab('order');
+  setTimeout(()=>document.getElementById('form-title').scrollIntoView({behavior:'smooth'}),300);
+}
+
+// ══════════════════════════════════════════════
+// ORDERS STATE
+// ══════════════════════════════════════════════
+let orders = [
+  { id:712, service:'🤖 Telegram Bot', title:'Yetkazib berish xizmati boti',
+    budget:'$200', deadline:'5-8 kun', stage:2, status:'in_progress', date:'Bugun, 15:20' }
+];
+
+// ══════════════════════════════════════════════
+// SUBMIT
+// ══════════════════════════════════════════════
+function submitFinalOrder() {
+  const title   = document.getElementById('form-title').value.trim();
+  const desc    = document.getElementById('form-desc').value.trim();
+  const contact = document.getElementById('form-contact').value.trim();
+  if (!title)   { haptic('error'); alert('Loyiha nomini kiriting!'); document.getElementById('form-title').focus(); return; }
+  if (!desc)    { haptic('error'); alert('Loyiha tavsifini kiriting!'); document.getElementById('form-desc').focus(); return; }
+  if (!contact) { haptic('error'); alert("Aloqa ma'lumotini kiriting!"); document.getElementById('form-contact').focus(); return; }
+
+  const feats=[];
+  if (document.getElementById('feat-payment')?.checked)   feats.push('Click/Payme');
+  if (document.getElementById('feat-admin')?.checked)     feats.push('Admin Panel');
+  if (document.getElementById('feat-ai')?.checked)        feats.push('ChatGPT AI');
+  if (document.getElementById('feat-multilang')?.checked) feats.push("Ko'p tillilik");
+
+  let total = PRICES[service][level];
+  if (document.getElementById('feat-payment')?.checked)   total+=50;
+  if (document.getElementById('feat-admin')?.checked)     total+=40;
+  if (document.getElementById('feat-ai')?.checked)        total+=60;
+  if (document.getElementById('feat-multilang')?.checked) total+=30;
+  if (discount>0) total=Math.round(total*(1-discount/100));
+
+  const payload = {
+    type:'webapp_order',
+    service_type: service==='bot'?'🤖 Telegram bot':'🌐 Veb-sayt',
+    project_name: title,
+    description:  desc+(feats.length?'\n(Qo\'shimchalar: '+feats.join(', ')+')':""),
+    budget: '$'+total,
+    deadline: DEADLINES[service][level],
+    contact, user_id: user?.id||null,
+    user_name: user?`${user.first_name} ${user.last_name||''}`.trim():null,
+    username: user?.username||null
+  };
+
+  orders.unshift({
+    id: Math.floor(100+Math.random()*900),
+    service: payload.service_type, title,
+    budget: payload.budget, deadline: payload.deadline,
+    stage:1, status:'pending', date:'Hozirgina'
+  });
+
+  haptic('success');
+  try { confetti({particleCount:140,spread:90,origin:{y:0.55}}); } catch(e){}
+  if (tg?.sendData) { tg.sendData(JSON.stringify(payload)); }
+  else { alert('🎉 Buyurtmangiz muvaffaqiyatli qabul qilindi!'); switchTab('myorders'); }
+}
+
+// ══════════════════════════════════════════════
+// MY ORDERS
+// ══════════════════════════════════════════════
+function loadMyOrders() {
+  const c = document.getElementById('my-orders-list');
+  if (!c) return;
+  if (!orders.length) {
+    c.innerHTML = `<div class="glass" style="border-radius:20px;padding:28px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;">
+      <div style="font-size:36px;">📭</div>
+      <div style="font-weight:700;font-size:14px;color:#e2e8f0;">Hozircha buyurtmalar yo'q</div>
+      <p style="font-size:12px;color:rgba(148,163,184,0.6);">Kalkulyator orqali birinchi loyihangizni yarating!</p>
+      <button onclick="switchTab('order')" class="tap" style="margin-top:4px;padding:10px 20px;background:rgba(34,211,238,0.15);border:1px solid rgba(34,211,238,0.35);border-radius:14px;font-size:12px;font-weight:700;color:var(--c-cyan);font-family:inherit;cursor:pointer;">Buyurtma berish</button>
+    </div>`;
+    return;
+  }
+  c.innerHTML = orders.map(o => {
+    const st = o.stage||1;
+    const pct = (st/4)*100;
+    const stateColors=['','var(--c-cyan)','var(--c-blue)','var(--c-violet)','var(--c-green)'];
+    const stateLabels=['','Qabul','Dizayn','Kodlash','Tayyor 🚀'];
+    return `<div class="glass" style="border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-size:12px;font-weight:800;color:var(--c-cyan);">#${o.id} • ${o.service}</div>
+        <div style="font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;${o.status==='pending'?'background:rgba(251,191,36,0.12);color:var(--c-amber);border:1px solid rgba(251,191,36,0.3);':'background:rgba(34,211,238,0.1);color:var(--c-cyan);border:1px solid rgba(34,211,238,0.25);'}">
+          ${o.status==='pending'?'🆕 Qabul qilindi':'⏳ Jarayonda'}
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:14px;color:#f1f5f9;margin-bottom:3px;">${o.title}</div>
+        <div style="font-size:11px;color:rgba(148,163,184,0.5);">📅 ${o.date}</div>
+      </div>
+      <!-- Stepper -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <span style="font-size:11px;font-weight:700;color:${stateColors[st]||'var(--c-cyan)'};">${stateLabels[st]||'Jarayonda'}</span>
+          <span style="font-size:10px;color:rgba(148,163,184,0.5);">${st}/4 bosqich</span>
+        </div>
+        <div style="height:6px;background:rgba(30,41,59,0.8);border-radius:4px;overflow:hidden;">
+          <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--c-cyan),var(--c-violet));border-radius:4px;transition:width 0.5s ease;"></div>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;">
+          ${[1,2,3,4].map(i=>`<span style="font-size:9px;font-weight:600;color:${i<=st?stateColors[i]:'rgba(148,163,184,0.3)'};">${['Qabul','Dizayn','Kodlash','Tayyor'][i-1]}</span>`).join('')}
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;padding-top:12px;border-top:1px solid rgba(99,179,237,0.08);font-size:12px;color:rgba(148,163,184,0.7);">
+        <span>💰 <strong style="color:#f1f5f9;">${o.budget}</strong></span>
+        <span>⏱️ <strong style="color:#f1f5f9;">${o.deadline}</strong></span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// ADMIN
+// ══════════════════════════════════════════════
+function loadAdminOrders() {
+  document.getElementById('adm-total').textContent   = orders.length;
+  document.getElementById('adm-pending').textContent = orders.filter(o=>o.status==='pending').length;
+  document.getElementById('adm-done').textContent    = orders.filter(o=>o.status==='done').length;
+  const c = document.getElementById('adm-orders');
+  if (!c) return;
+  c.innerHTML = orders.map(o=>`
+    <div class="glass" style="border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div style="font-size:12px;font-weight:800;color:var(--c-cyan);">#${o.id} • ${o.service}</div>
+        <div style="font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;${o.status==='pending'?'background:rgba(251,191,36,0.12);color:var(--c-amber);border:1px solid rgba(251,191,36,0.3);':'background:rgba(52,211,153,0.12);color:var(--c-green);border:1px solid rgba(52,211,153,0.3);'}">
+          ${o.status==='pending'?'🆕 Yangi':'✅ Tasdiqlangan'}
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:13px;color:#f1f5f9;">${o.title}</div>
+        <div style="font-size:11px;color:rgba(148,163,184,0.5);margin-top:3px;">Byudjet: <strong style="color:var(--c-cyan);">${o.budget}</strong> | Muddat: ${o.deadline}</div>
+      </div>
+      <div style="display:flex;gap:8px;padding-top:10px;border-top:1px solid rgba(99,179,237,0.08);">
+        <button onclick="setAdminStage(${o.id},3)" class="tap" style="flex:1;padding:9px;background:rgba(34,211,238,0.1);border:1px solid rgba(34,211,238,0.25);border-radius:12px;font-size:11px;font-weight:700;color:var(--c-cyan);font-family:inherit;cursor:pointer;">💻 Kodlash</button>
+        <button onclick="setAdminStage(${o.id},4)" class="tap" style="flex:1;padding:9px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.25);border-radius:12px;font-size:11px;font-weight:700;color:var(--c-green);font-family:inherit;cursor:pointer;">🚀 Topshirish</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function setAdminStage(id, stage) {
+  haptic('medium');
+  const o = orders.find(x=>x.id===id);
+  if (o) { o.stage=stage; o.status=stage>=4?'done':'in_progress'; loadAdminOrders(); }
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+calculate();
+setLevel('medium'); // ensure badge applied
+</script>
+</body>
+</html>
