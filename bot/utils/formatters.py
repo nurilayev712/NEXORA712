@@ -13,15 +13,22 @@ def get_status_badge(status: str) -> str:
 
 def format_order_summary(data: dict) -> str:
     """Mijozga tasdiqlash uchun buyurtma xulosasi"""
+    service_type = data.get("service_type", "Noma'lum")
+    project_name = data.get("project_name", "Ko'rsatilmagan")
+    description = data.get("description", "Ko'rsatilmagan")
+    budget = data.get("budget", "Ko'rsatilmagan")
+    deadline = data.get("deadline", "Ko'rsatilmagan")
+    contact = data.get("contact", "Ko'rsatilmagan")
+
     return (
         "📋 **BUYURTMA XULOSASI:**\n"
         "━━━━━━━━━━━━━━━━━━━━━━\n"
-        f"📌 **Xizmat turi:** {data.get('service_type', 'Noma\'lum')}\n"
-        f"💡 **Loyiha nomi:** {data.get('project_name', 'Ko\'rsatilmagan')}\n"
-        f"📝 **Tavsif:** {data.get('description', 'Ko\'rsatilmagan')}\n"
-        f"💰 **Byudjet:** {data.get('budget', 'Ko\'rsatilmagan')}\n"
-        f"⏱️ **Muddat:** {data.get('deadline', 'Ko\'rsatilmagan')}\n"
-        f"📞 **Aloqa:** {data.get('contact', 'Ko\'rsatilmagan')}\n"
+        f"📌 **Xizmat turi:** {service_type}\n"
+        f"💡 **Loyiha nomi:** {project_name}\n"
+        f"📝 **Tavsif:** {description}\n"
+        f"💰 **Byudjet:** {budget}\n"
+        f"⏱️ **Muddat:** {deadline}\n"
+        f"📞 **Aloqa:** {contact}\n"
         "━━━━━━━━━━━━━━━━━━━━━━\n"
         "Barcha ma'lumotlar to'g'rimi? Tasdiqlaysizmi?"
     )

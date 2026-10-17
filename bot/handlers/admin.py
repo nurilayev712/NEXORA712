@@ -414,13 +414,14 @@ async def process_portfolio_link(message: Message, state: FSMContext):
         link=link_val,
     )
 
+    link_display = link_val if link_val else "Yo'q"
     success_text = (
         "✅ **YANGI PORTFOLIO MUVAFFAQIYATLI QO'SHILDI!**\n\n"
         f"🆔 ID: #{new_id}\n"
         f"📌 Nomi: {data['title']}\n"
         f"🏷 Toifa: {data['category']}\n"
         f"📝 Tavsif: {data['description']}\n"
-        f"🔗 Havola: {link_val or 'Yo\'q'}\n\n"
+        f"🔗 Havola: {link_display}\n\n"
         "Mijozlar endi ushbu loyihani '📁 Portfolio' bo'limida ko'rishlari mumkin!"
     )
 
