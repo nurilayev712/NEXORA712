@@ -30,7 +30,7 @@ ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "NEXORA712").lstrip("@")
 ADMIN_PHONE = os.getenv("ADMIN_PHONE", "+998901234567")
 
 # Telegram WebApp havolasi (HTTPS bo'lishi shart)
-WEBAPP_URL = os.getenv("WEBAPP_URL", "https://nexora712.vercel.app").strip()
+WEBAPP_URL = os.getenv("WEBAPP_URL", "https://nexora712.onrender.com/webapp").strip()
 
 # Ma'lumotlar bazasi fayl yo'li
 DB_PATH = BASE_DIR / "database" / "bot.db"
